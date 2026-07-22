@@ -96,6 +96,42 @@ gantt
 First shift arrives to part numbers, a filled cart, a completed claim form,
 and a rebate deadline — none of which existed at close of business.
 
+## The money — one plant, one year
+
+The reference plant is the buyer we named: a single-line facility,
+~$20M revenue, ~20 sourced-part work orders per month, one maintenance
+manager who is also procurement. Every input below sits at the **bottom** of
+its published range, and every range is graded in
+[RESEARCH.md](RESEARCH.md) §7–10. This is a model, not a measurement — the
+pilot metric that replaces it is work-order-open → part-on-bench.
+
+**Money saved:**
+
+| line | mechanism | conservative year-one value |
+|---|---|---|
+| down-line hours removed | the part is sourced overnight, not when the manager gets to it; count only 4 downtime events/yr where the part path is critical, 1 hour saved each, at the $10K/hr discrete-manufacturing floor | **$40,000** |
+| wrong-part reorders avoided | ~1 in 5 parts ordered online is returned (adjacent industries); an exact spec halves it: 24 avoided reorders/yr × rush-shipping premium and repeat labor | **$4,000** |
+| manager hours returned | 240 sourcing sessions/yr × 30 min each × ~$58/hr (BLS, industrial production manager median) | **$7,000** |
+
+**Money made — cash in, not cost avoided:**
+
+| line | mechanism | conservative year-one value |
+|---|---|---|
+| warranty claims filed | under manual tracking most eligible claims are never filed (vendor-reported recovery ~30% → 85–95% when systematic); on a modest $12K/yr of warranty-eligible failures | **$8,000** |
+| utility rebates claimed | motor rebates run $40–$7,000 per qualifying swap; count 3 small-motor swaps | **$1,500** |
+| compliance fines avoided | one lapsed cert or missed renewal — real but unpriced | not counted |
+
+**Total: ~$60K in year one — roughly $50K saved, $10K new cash in** — against
+a marginal run cost of pennies of open-model inference per goal and one
+browser ticket per work order.
+
+The sensitivity runs one direction. The downtime line is 4 hours at the
+floor of the range; the same 4 hours at the top of the discrete band
+($50K/hr) is $200K, and every *additional* hour the overnight queue removes
+is another $10–50K. The recovery lines are the opposite shape: small,
+certain, and cumulative — they are the lines that pay for the tool in cash
+even if you never credit it with a single downtime hour.
+
 ## The evidence — measured live tonight
 
 **The core finding: browser agents do not fail because they cannot act.
@@ -272,6 +308,9 @@ and `ACTIONLAYER_API_KEY`.
   ground truth.
 - Fortune-500 downtime figures are extrapolated to small facilities, and we
   say so. All source grades: [RESEARCH.md](RESEARCH.md).
+- **The dollar model is a model.** Every input is at the bottom of a graded
+  published range, but no line is measured at a real facility yet. The pilot
+  replaces the model with a stopwatch.
 
 ## The one-sentence pitch
 
