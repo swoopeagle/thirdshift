@@ -232,6 +232,25 @@ holds. The ledger is [evidence/tickets.json](evidence/tickets.json).
   all 10 claims verified against the live API.
 ```
 
+### In flight at submission time
+
+Two tickets were still `pending` when we submitted (fired 19:05, past the usual
+15–20 min — the API is under hackathon load). They are deliberately **not** in the
+verified ledger, because we only claim what we can prove:
+
+| Ticket | What it would add |
+|---|---|
+| `tkt_os-NZoZVT6Q_-w8vPo7ovA` | McMaster sourcing execution for the plant vertical |
+| `tkt_a9_WAN5aAe0pPdlD9KkY8g` | a second completed SNAP record |
+
+Check them yourself: `./al.sh get tkt_os-NZoZVT6Q_-w8vPo7ovA`
+
+**What the plant vertical proves without them:** the symptom→spec translation runs
+in seconds and is fully reproducible offline — `python3 plant.py "bearing on pump 3
+is squealing" --facts workorder.json --dry`. The execution half is proven by the
+SNAP vertical, which completed on a real federal site. Same `al_fire`, same poller,
+same code path — `plant.py` imports both directly from `snap.py`.
+
 ## Run it
 
 ```bash
