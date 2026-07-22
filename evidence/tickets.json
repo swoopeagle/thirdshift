@@ -1,0 +1,67 @@
+{
+ "harvested": "2026-07-21 evening PDT",
+ "tickets": [
+  {
+   "ticket": "tkt_LclPziYpSgddl0HA-tF3nQ",
+   "state": "completed",
+   "proves": "THE RESULT: real federal benefits screening from a de-identified instruction",
+   "outcome": "Supplemental Security Income (SSI) for adults: Likely eligible\nRetirement benefits: Likely eligible\nTax-advantaged retirement plans information: Likely eligible\nMedicare with retirement: Likely eligible",
+   "headline": true,
+   "instruction": "Complete this benefit finder questionnaire for a 68-year-old widow living alone in California who rents, has $1,150/month Social Security and no other income or assets. Return the list of benefits she may qualify for."
+  },
+  {
+   "ticket": "tkt_wf1gX1Hsf9mGA0Wpq3lp7g",
+   "state": "completed",
+   "proves": "LATENCY: their own docs example, ~20min vs documented 30s-5min",
+   "outcome": "Date of birth: December 10, 1815\nCalculating engine: Analytical Engine\nSection heading: Biography\nSource: https://en.wikipedia.org/wiki/Ada_Lovelace#Biography"
+  },
+  {
+   "ticket": "tkt_jKQfB8EeppO-7FRsFSx8Fw",
+   "state": "completed",
+   "proves": "LATENCY: trivial page, ~15min",
+   "outcome": "Page Heading: Example Domain\nFirst Paragraph:This domain is for use in documentation examples without needing permission. Avoid use in operations. \nSource: https://example.com/"
+  },
+  {
+   "ticket": "tkt_naK16C09NCbED56ZfSAB0Q",
+   "state": "completed",
+   "proves": "write-actions work (imgflip meme generated)",
+   "outcome": "https://imgflip.com/i/ax5flx"
+  },
+  {
+   "ticket": "tkt_3MkSKxB6TtgLpnP6fduh4w",
+   "state": "failed",
+   "proves": "META-INSTRUCTION FAILS: 'report on navigating' benefitscal",
+   "outcome": "The task could not be completed."
+  },
+  {
+   "ticket": "tkt_-RBYf2D9U3H3ApP7t0512A",
+   "state": "failed",
+   "proves": "META-INSTRUCTION FAILS: same site as the win, survey framing -> blocked 2x then failed",
+   "outcome": "The task could not be completed."
+  },
+  {
+   "ticket": "tkt_jRhmDqnjAx9kiipvm7QVrA",
+   "state": "completed",
+   "proves": "CONTROL: account healthy for single tickets at 18:56",
+   "outcome": "Example Domain"
+  },
+  {
+   "ticket": "tkt_cx5Ud6OypCuhZHE29gF3gQ",
+   "state": "cancelled",
+   "proves": "CONCURRENCY: one of 6 fired 20s apart -> all 6 cancelled",
+   "outcome": ""
+  },
+  {
+   "ticket": "tkt_EyD_wocQabSz5qv9Bk60uQ",
+   "state": "cancelled",
+   "proves": "CONCURRENCY: one of 6 fired 20s apart -> all 6 cancelled",
+   "outcome": ""
+  },
+  {
+   "ticket": "tkt_npGncI6UbgRPiIl1UUDNOw",
+   "state": "cancelled",
+   "proves": "CONCURRENCY: one of 6 fired 20s apart -> all 6 cancelled",
+   "outcome": ""
+  }
+ ]
+}

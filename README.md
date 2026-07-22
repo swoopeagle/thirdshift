@@ -40,9 +40,25 @@ vague human ask
 Operating lessons we measured that aren't in anyone's docs ([WIN.md](WIN.md)):
 - **Imperative goals succeed; meta-instructions fail.** "Complete this
   screener for…" works. "Report how far you got…" dies.
-- **Concurrency throttle:** 8 simultaneous tickets → all fail in ~3 min.
-  Staggered 20s apart → they run. Fast failure = throttled; slow = real.
+- **Concurrency is capped at ~1.** 8 simultaneous → all failed in ~3 min.
+  6 staggered 20s apart → **all cancelled**. 1 alone → completed, 4/4.
+  Fast failure (~3 min) = throttled; slow failure or slow success = it really
+  drove a browser.
 - Instructions truncate around ~500 chars — compile tight goals.
+- **`blocked_on_user` detail is only on `GET /tasks/{id}`** — the documented
+  `/v1/actions/tickets/{id}` and its MCP tool return nulls.
+- Python-urllib's default User-Agent gets 403'd; curl doesn't. Set any UA.
+- Novita models are reasoning models — `reasoning_content` eats the token
+  budget before `content` exists. `max_tokens=400` returns `""`; use 3000+.
+
+### The contradiction worth reporting
+
+15–20 min/ticket makes ActionLayer unusable for a consumer concierge and
+**ideal for overnight back-office batch work** — nobody is watching, and the
+alternative is a human on hold for 45 minutes. That is the use case the latency
+selects for. But the platform cancels or fails concurrent tickets. **The one
+shape that fits the latency is the shape it can't do today.** Raise per-account
+concurrency and the batch use case opens up.
 
 ## How we solved it — two verticals, one architecture
 
@@ -56,8 +72,10 @@ and we screen the whole roster overnight, in parallel.
 
 - Single-record proof: **completed**, real screener output ("SSI: Likely
   eligible; Medicare with retirement: Likely eligible…") — [WIN.md](WIN.md).
-- Batch fan-out: 6 de-identified records staggered 20s apart —
-  [batch_results.json](batch_results.json).
+- Batch fan-out is **built and blocked, not proven**: both fan-out attempts
+  (8 simultaneous, then 6 staggered) were killed by the concurrency cap. The
+  dashboard runs against real sequential tickets. We are not claiming batch
+  throughput we did not achieve.
 - The PII answer is structural: **the agent never sees a person.**
 - The 15–20 min latency that kills consumer concierge is irrelevant overnight
   — the latency *selects* the use case.
@@ -74,6 +92,21 @@ by design: part number, price, stock — a human approves the filled cart.
   [PLANT.md](PLANT.md), honestly recorded either way.
 - What we deliberately do NOT claim yet (TaskRabbit, checkout) is listed
   there too.
+
+## Prove it
+
+```bash
+python3 verify.py
+```
+
+Re-fetches every ticket cited in this repo from the live ActionLayer API and
+checks the recorded state still matches. **Nothing here is asserted from
+memory** — successes, failures, and cancellations alike. Exit 0 = every claim
+holds. The ledger is [evidence/tickets.json](evidence/tickets.json).
+
+```
+  all 10 claims verified against the live API.
+```
 
 ## Run it
 
