@@ -1,0 +1,574 @@
+{
+ "rows": [
+  {
+   "id": "#47",
+   "rec": {
+    "id": "#47",
+    "age": 68,
+    "state": "CA",
+    "household": 1,
+    "income": 1150,
+    "rent": 900,
+    "assets": "none",
+    "disability": false
+   },
+   "goal": "Complete this benefit finder for a 68-year-old in CA, household of 1, $1150/month income, $900/mo rent, assets none. Return the list of benefits they may qualify for.",
+   "ticket": "tkt_zQCrrt6YrBnR1kYnDPBr2A",
+   "chars": 166
+  },
+  {
+   "id": "#48",
+   "rec": {
+    "id": "#48",
+    "age": 74,
+    "state": "CA",
+    "household": 1,
+    "income": 980,
+    "rent": 1100,
+    "assets": "none",
+    "disability": true
+   },
+   "goal": "Complete this benefit finder for a 74-year-old in CA, household of 1, $980/month income, $1100/mo rent, assets none, receives disability. Return the list of benefits they may qualify for.",
+   "ticket": "tkt_dNm87a4J-sYA_uCp_z4jGA",
+   "chars": 187
+  },
+  {
+   "id": "#49",
+   "rec": {
+    "id": "#49",
+    "age": 71,
+    "state": "CA",
+    "household": 2,
+    "income": 1840,
+    "rent": 1400,
+    "assets": "none",
+    "disability": false
+   },
+   "goal": "Complete this benefit finder for a 71-year-old in CA, household of 2, $1840/month income, $1400/mo rent, assets none. Return the list of benefits they may qualify for.",
+   "ticket": "tkt_Ca1U4JTf2yF1_nhA-yqxhQ",
+   "chars": 167
+  },
+  {
+   "id": "#50",
+   "rec": {
+    "id": "#50",
+    "age": 66,
+    "state": "CA",
+    "household": 1,
+    "income": 1420,
+    "rent": 750,
+    "assets": "under $2,000",
+    "disability": false
+   },
+   "goal": "Complete this benefit finder for a 66-year-old in CA, household of 1, $1420/month income, $750/mo rent, assets under $2,000. Return the list of benefits they may qualify for.",
+   "ticket": "tkt_fxP_CyY6ogZGWz0v2I3Wmg",
+   "chars": 174
+  },
+  {
+   "id": "#51",
+   "rec": {
+    "id": "#51",
+    "age": 82,
+    "state": "CA",
+    "household": 1,
+    "income": 1075,
+    "rent": 0,
+    "assets": "none",
+    "disability": true
+   },
+   "goal": "Complete this benefit finder for a 82-year-old in CA, household of 1, $1075/month income, no housing cost, assets none, receives disability. Return the list of benefits they may qualify for.",
+   "ticket": "tkt_BelWx4QOdrRMVRh56IH3Ew",
+   "chars": 190
+  },
+  {
+   "id": "#52",
+   "rec": {
+    "id": "#52",
+    "age": 69,
+    "state": "CA",
+    "household": 3,
+    "income": 2210,
+    "rent": 1650,
+    "assets": "none",
+    "disability": false
+   },
+   "goal": "Complete this benefit finder for a 69-year-old in CA, household of 3, $2210/month income, $1650/mo rent, assets none. Return the list of benefits they may qualify for.",
+   "ticket": "tkt_-3Dlqwq5aHEhQVSBfcr3SA",
+   "chars": 167
+  },
+  {
+   "id": "#53",
+   "rec": {
+    "id": "#53",
+    "age": 77,
+    "state": "CA",
+    "household": 1,
+    "income": 1310,
+    "rent": 1000,
+    "assets": "under $2,000",
+    "disability": false
+   },
+   "goal": "Complete this benefit finder for a 77-year-old in CA, household of 1, $1310/month income, $1000/mo rent, assets under $2,000. Return the list of benefits they may qualify for.",
+   "ticket": "tkt_pnn4HFaYmN7rvMNAa-vjKw",
+   "chars": 175
+  },
+  {
+   "id": "#54",
+   "rec": {
+    "id": "#54",
+    "age": 65,
+    "state": "CA",
+    "household": 2,
+    "income": 1690,
+    "rent": 1250,
+    "assets": "none",
+    "disability": true
+   },
+   "goal": "Complete this benefit finder for a 65-year-old in CA, household of 2, $1690/month income, $1250/mo rent, assets none, receives disability. Return the list of benefits they may qualify for.",
+   "ticket": "tkt_X_SL_qO9plhPMLIqZOEghA",
+   "chars": 188
+  }
+ ],
+ "results": [
+  {
+   "id": "tkt_zQCrrt6YrBnR1kYnDPBr2A",
+   "state": "failed",
+   "goal": "direct.browser_action: url='https://www.benefits.gov/benefit-finder', instruction='Complete this benefit finder for a 68-year-old in CA, household of 1, $1150/month income, $900/mo rent, assets none. Return the list of benefits they may qualify for.'",
+   "flow": null,
+   "max_budget_usd": null,
+   "webhook_url": null,
+   "result": {},
+   "error": "The task could not be completed.",
+   "reason": "The task could not be completed.",
+   "created_at": "2026-07-22T01:51:56.189539Z",
+   "updated_at": "2026-07-22T01:54:28.127843Z",
+   "completed_at": "2026-07-22T01:54:28.127273Z",
+   "info_request": null,
+   "events": [
+    {
+     "id": "evt_z9p3IpGw52oafrQdez8PLA",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:56.391170Z"
+    },
+    {
+     "id": "evt_UzaeHrubzywf9bG9vL32zA",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:56.472143Z"
+    },
+    {
+     "id": "evt_w_QfsLdbbcw6ylCWnBHRww",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:56.646838Z"
+    },
+    {
+     "id": "evt_LKmHaPeC_vS4fYxy6unfKQ",
+     "type": "fail",
+     "from_state": "pending",
+     "to_state": "failed",
+     "payload": {},
+     "created_at": "2026-07-22T01:54:28.131290Z"
+    }
+   ]
+  },
+  {
+   "id": "tkt_dNm87a4J-sYA_uCp_z4jGA",
+   "state": "failed",
+   "goal": "direct.browser_action: url='https://www.benefits.gov/benefit-finder', instruction='Complete this benefit finder for a 74-year-old in CA, household of 1, $980/month income, $1100/mo rent, assets none, receives disability. Return the list of benefits they may qualify for.'",
+   "flow": null,
+   "max_budget_usd": null,
+   "webhook_url": null,
+   "result": {},
+   "error": "The task could not be completed.",
+   "reason": "The task could not be completed.",
+   "created_at": "2026-07-22T01:51:56.522301Z",
+   "updated_at": "2026-07-22T01:54:55.083268Z",
+   "completed_at": "2026-07-22T01:54:55.082720Z",
+   "info_request": null,
+   "events": [
+    {
+     "id": "evt_6Ph2usoJjDM1E7oNL1wWvw",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:58.503146Z"
+    },
+    {
+     "id": "evt_gs9qfWErX6enJdSnvcsdwQ",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:58.581960Z"
+    },
+    {
+     "id": "evt_gM1eWGSFphzZXFmUgB1WCQ",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:58.717373Z"
+    },
+    {
+     "id": "evt_ept5T901UMdmMYQ9vOgH6Q",
+     "type": "fail",
+     "from_state": "pending",
+     "to_state": "failed",
+     "payload": {},
+     "created_at": "2026-07-22T01:54:55.084717Z"
+    }
+   ]
+  },
+  {
+   "id": "tkt_Ca1U4JTf2yF1_nhA-yqxhQ",
+   "state": "failed",
+   "goal": "direct.browser_action: url='https://www.benefits.gov/benefit-finder', instruction='Complete this benefit finder for a 71-year-old in CA, household of 2, $1840/month income, $1400/mo rent, assets none. Return the list of benefits they may qualify for.'",
+   "flow": null,
+   "max_budget_usd": null,
+   "webhook_url": null,
+   "result": {},
+   "error": "The task could not be completed.",
+   "reason": "The task could not be completed.",
+   "created_at": "2026-07-22T01:51:56.483307Z",
+   "updated_at": "2026-07-22T01:54:40.201387Z",
+   "completed_at": "2026-07-22T01:54:40.200756Z",
+   "info_request": null,
+   "events": [
+    {
+     "id": "evt_JITopl3krreG7eQaBqHvxg",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:57.700163Z"
+    },
+    {
+     "id": "evt_hMTLXmG6iqYGWllwBW40Sg",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:57.784240Z"
+    },
+    {
+     "id": "evt_ltfP3FjoCQSfkbmDWl6vDA",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:57.923739Z"
+    },
+    {
+     "id": "evt_Sq8BfBQdT9Y9RgmJuPR4oA",
+     "type": "fail",
+     "from_state": "pending",
+     "to_state": "failed",
+     "payload": {},
+     "created_at": "2026-07-22T01:54:40.203241Z"
+    }
+   ]
+  },
+  {
+   "id": "tkt_fxP_CyY6ogZGWz0v2I3Wmg",
+   "state": "failed",
+   "goal": "direct.browser_action: url='https://www.benefits.gov/benefit-finder', instruction='Complete this benefit finder for a 66-year-old in CA, household of 1, $1420/month income, $750/mo rent, assets under $2,000. Return the list of benefits they may qualify for.'",
+   "flow": null,
+   "max_budget_usd": null,
+   "webhook_url": null,
+   "result": {},
+   "error": "The task could not be completed.",
+   "reason": "The task could not be completed.",
+   "created_at": "2026-07-22T01:51:56.550296Z",
+   "updated_at": "2026-07-22T01:54:59.524564Z",
+   "completed_at": "2026-07-22T01:54:59.523970Z",
+   "info_request": null,
+   "events": [
+    {
+     "id": "evt_fwCrEAv89Tp48Dr1_Xk6Yw",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:59.296600Z"
+    },
+    {
+     "id": "evt_6QVCn12wJqqFYFocnnbC7w",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:59.381792Z"
+    },
+    {
+     "id": "evt_CQY-YdSwjJ10RMq7kRu7MA",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:59.517316Z"
+    },
+    {
+     "id": "evt_iG2zNYmYyaNqTff1ZUqlrA",
+     "type": "fail",
+     "from_state": "pending",
+     "to_state": "failed",
+     "payload": {},
+     "created_at": "2026-07-22T01:54:59.526054Z"
+    }
+   ]
+  },
+  {
+   "id": "tkt_BelWx4QOdrRMVRh56IH3Ew",
+   "state": "failed",
+   "goal": "direct.browser_action: url='https://www.benefits.gov/benefit-finder', instruction='Complete this benefit finder for a 82-year-old in CA, household of 1, $1075/month income, no housing cost, assets none, receives disability. Return the list of benefits they may qualify for.'",
+   "flow": null,
+   "max_budget_usd": null,
+   "webhook_url": null,
+   "result": {},
+   "error": "The task could not be completed.",
+   "reason": "The task could not be completed.",
+   "created_at": "2026-07-22T01:51:56.536590Z",
+   "updated_at": "2026-07-22T01:54:49.543649Z",
+   "completed_at": "2026-07-22T01:54:49.543094Z",
+   "info_request": null,
+   "events": [
+    {
+     "id": "evt_SW6LBSZHdGO_XWG-rj9u_w",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:58.897478Z"
+    },
+    {
+     "id": "evt_LHTj0o52WKhnt_37xsflVw",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:58.979894Z"
+    },
+    {
+     "id": "evt_alLs-JLS4eMqcVXN0QEwjg",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:59.125085Z"
+    },
+    {
+     "id": "evt_YwBlICPfUiR8rIkaP-1pzA",
+     "type": "fail",
+     "from_state": "pending",
+     "to_state": "failed",
+     "payload": {},
+     "created_at": "2026-07-22T01:54:49.544871Z"
+    }
+   ]
+  },
+  {
+   "id": "tkt_-3Dlqwq5aHEhQVSBfcr3SA",
+   "state": "failed",
+   "goal": "direct.browser_action: url='https://www.benefits.gov/benefit-finder', instruction='Complete this benefit finder for a 69-year-old in CA, household of 3, $2210/month income, $1650/mo rent, assets none. Return the list of benefits they may qualify for.'",
+   "flow": null,
+   "max_budget_usd": null,
+   "webhook_url": null,
+   "result": {},
+   "error": "The task could not be completed.",
+   "reason": "The task could not be completed.",
+   "created_at": "2026-07-22T01:51:56.231408Z",
+   "updated_at": "2026-07-22T01:54:32.891815Z",
+   "completed_at": "2026-07-22T01:54:32.891269Z",
+   "info_request": null,
+   "events": [
+    {
+     "id": "evt_saIFESO5PkNpft6KIOl0Fw",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:56.844556Z"
+    },
+    {
+     "id": "evt_I7OWUqCJgtHKVuBKOFQHtw",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:56.925161Z"
+    },
+    {
+     "id": "evt_rFyx_H2UB_VFOyAHxyJ2Ig",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:57.064189Z"
+    },
+    {
+     "id": "evt_IQ8Bxmnw7yC3b80Qmt3uZw",
+     "type": "fail",
+     "from_state": "pending",
+     "to_state": "failed",
+     "payload": {},
+     "created_at": "2026-07-22T01:54:32.894075Z"
+    }
+   ]
+  },
+  {
+   "id": "tkt_pnn4HFaYmN7rvMNAa-vjKw",
+   "state": "failed",
+   "goal": "direct.browser_action: url='https://www.benefits.gov/benefit-finder', instruction='Complete this benefit finder for a 77-year-old in CA, household of 1, $1310/month income, $1000/mo rent, assets under $2,000. Return the list of benefits they may qualify for.'",
+   "flow": null,
+   "max_budget_usd": null,
+   "webhook_url": null,
+   "result": {},
+   "error": "The task could not be completed.",
+   "reason": "The task could not be completed.",
+   "created_at": "2026-07-22T01:51:56.320752Z",
+   "updated_at": "2026-07-22T01:54:36.151140Z",
+   "completed_at": "2026-07-22T01:54:36.150562Z",
+   "info_request": null,
+   "events": [
+    {
+     "id": "evt_LH3th9reom_k-2rXysrg2A",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:57.276025Z"
+    },
+    {
+     "id": "evt_8-iXm8XFme14rbKa9U40kA",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:57.359572Z"
+    },
+    {
+     "id": "evt_wmJTHakUz21Oe2KI32vahw",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:57.500667Z"
+    },
+    {
+     "id": "evt_JnO3loKt2Y17IS1vD3IEcg",
+     "type": "fail",
+     "from_state": "pending",
+     "to_state": "failed",
+     "payload": {},
+     "created_at": "2026-07-22T01:54:36.152304Z"
+    }
+   ]
+  },
+  {
+   "id": "tkt_X_SL_qO9plhPMLIqZOEghA",
+   "state": "failed",
+   "goal": "direct.browser_action: url='https://www.benefits.gov/benefit-finder', instruction='Complete this benefit finder for a 65-year-old in CA, household of 2, $1690/month income, $1250/mo rent, assets none, receives disability. Return the list of benefits they may qualify for.'",
+   "flow": null,
+   "max_budget_usd": null,
+   "webhook_url": null,
+   "result": {},
+   "error": "The task could not be completed.",
+   "reason": "The task could not be completed.",
+   "created_at": "2026-07-22T01:51:56.505028Z",
+   "updated_at": "2026-07-22T01:54:43.926180Z",
+   "completed_at": "2026-07-22T01:54:43.925642Z",
+   "info_request": null,
+   "events": [
+    {
+     "id": "evt_c7XCKIGhbs9Af66RtO2iVg",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:58.108363Z"
+    },
+    {
+     "id": "evt_TkvYl9LF6T0JWfvXS_Z1dQ",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:58.191220Z"
+    },
+    {
+     "id": "evt_HFubckIwDVhNldYiClbzkw",
+     "type": "pending_update",
+     "from_state": "pending",
+     "to_state": "pending",
+     "payload": {
+      "action_id": "direct.browser_action"
+     },
+     "created_at": "2026-07-22T01:51:58.328690Z"
+    },
+    {
+     "id": "evt_l_1UiNpubEFnVqWt2k2RLA",
+     "type": "fail",
+     "from_state": "pending",
+     "to_state": "failed",
+     "payload": {},
+     "created_at": "2026-07-22T01:54:43.928411Z"
+    }
+   ]
+  }
+ ]
+}

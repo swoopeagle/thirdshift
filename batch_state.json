@@ -1,5 +1,5 @@
 {
- "started": 1784685116.578065,
+ "started": 1784685439.423917,
  "rows": [
   {
    "id": "#47",
@@ -14,7 +14,7 @@
     "disability": false
    },
    "goal": "Complete this benefit finder for a 68-year-old in CA, household of 1, $1150/month income, $900/mo rent, assets none. Return the list of benefits they may qualify for.",
-   "ticket": "tkt_zQCrrt6YrBnR1kYnDPBr2A",
+   "ticket": "tkt_cx5Ud6OypCuhZHE29gF3gQ",
    "chars": 166
   },
   {
@@ -30,7 +30,7 @@
     "disability": true
    },
    "goal": "Complete this benefit finder for a 74-year-old in CA, household of 1, $980/month income, $1100/mo rent, assets none, receives disability. Return the list of benefits they may qualify for.",
-   "ticket": "tkt_dNm87a4J-sYA_uCp_z4jGA",
+   "ticket": "tkt_EyD_wocQabSz5qv9Bk60uQ",
    "chars": 187
   },
   {
@@ -46,7 +46,7 @@
     "disability": false
    },
    "goal": "Complete this benefit finder for a 71-year-old in CA, household of 2, $1840/month income, $1400/mo rent, assets none. Return the list of benefits they may qualify for.",
-   "ticket": "tkt_Ca1U4JTf2yF1_nhA-yqxhQ",
+   "ticket": "tkt_npGncI6UbgRPiIl1UUDNOw",
    "chars": 167
   },
   {
@@ -62,7 +62,7 @@
     "disability": false
    },
    "goal": "Complete this benefit finder for a 66-year-old in CA, household of 1, $1420/month income, $750/mo rent, assets under $2,000. Return the list of benefits they may qualify for.",
-   "ticket": "tkt_fxP_CyY6ogZGWz0v2I3Wmg",
+   "ticket": "tkt_wPmVyTBBCZl0hGqwovYrWQ",
    "chars": 174
   },
   {
@@ -78,7 +78,7 @@
     "disability": true
    },
    "goal": "Complete this benefit finder for a 82-year-old in CA, household of 1, $1075/month income, no housing cost, assets none, receives disability. Return the list of benefits they may qualify for.",
-   "ticket": "tkt_BelWx4QOdrRMVRh56IH3Ew",
+   "ticket": "tkt_xYFmYrpY5LqU473D6gls0A",
    "chars": 190
   },
   {
@@ -94,40 +94,8 @@
     "disability": false
    },
    "goal": "Complete this benefit finder for a 69-year-old in CA, household of 3, $2210/month income, $1650/mo rent, assets none. Return the list of benefits they may qualify for.",
-   "ticket": "tkt_-3Dlqwq5aHEhQVSBfcr3SA",
+   "ticket": "tkt_J44cH6wjWiU_xJuu6ZJ1XA",
    "chars": 167
-  },
-  {
-   "id": "#53",
-   "rec": {
-    "id": "#53",
-    "age": 77,
-    "state": "CA",
-    "household": 1,
-    "income": 1310,
-    "rent": 1000,
-    "assets": "under $2,000",
-    "disability": false
-   },
-   "goal": "Complete this benefit finder for a 77-year-old in CA, household of 1, $1310/month income, $1000/mo rent, assets under $2,000. Return the list of benefits they may qualify for.",
-   "ticket": "tkt_pnn4HFaYmN7rvMNAa-vjKw",
-   "chars": 175
-  },
-  {
-   "id": "#54",
-   "rec": {
-    "id": "#54",
-    "age": 65,
-    "state": "CA",
-    "household": 2,
-    "income": 1690,
-    "rent": 1250,
-    "assets": "none",
-    "disability": true
-   },
-   "goal": "Complete this benefit finder for a 65-year-old in CA, household of 2, $1690/month income, $1250/mo rent, assets none, receives disability. Return the list of benefits they may qualify for.",
-   "ticket": "tkt_X_SL_qO9plhPMLIqZOEghA",
-   "chars": 188
   }
  ]
 }

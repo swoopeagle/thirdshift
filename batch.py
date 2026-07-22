@@ -76,9 +76,19 @@ def fire_one(rec):
 
 def cmd_fire():
     roster = json.load(open(os.path.join(HERE, "roster.json")))
-    print(f"{B}fanning out {len(roster)} de-identified records…{X}")
-    with ThreadPoolExecutor(max_workers=len(roster)) as ex:
-        rows = list(ex.map(fire_one, roster))
+    n = int(sys.argv[2]) if len(sys.argv) > 2 else len(roster)
+    roster = roster[:n]
+    # MEASURED 18:52: firing 8 simultaneously => all 8 failed in 3 min
+    # (throttled). The same goal fired alone completes. Stagger the fan-out.
+    STAGGER = 20
+    print(f"{B}fanning out {len(roster)} de-identified records, {STAGGER}s apart…{X}")
+    rows = []
+    for i, rec in enumerate(roster):
+        if i:
+            time.sleep(STAGGER)
+        r = fire_one(rec)
+        rows.append(r)
+        print(f"  {r['id']}  {'queued' if r['ticket'] else R+'FAILED'+X}  {D}{r['ticket'] or ''}{X}")
     json.dump({"started": time.time(), "rows": rows}, open(STATE, "w"), indent=1)
     ok = sum(1 for r in rows if r["ticket"])
     print(f"{G}{ok}/{len(rows)} queued{X}  {D}(goal strings {min(r['chars'] for r in rows)}-{max(r['chars'] for r in rows)} chars){X}")
