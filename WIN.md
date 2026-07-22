@@ -38,3 +38,19 @@ the night and it is not in their docs.
 
 Fast failure (~3 min) is the throttle signature. Slow failure (~5-6 min) or slow
 success (~15-20 min) means it actually drove the browser.
+
+## The finding to lead with (measured 18:52–19:05)
+
+| Fan-out | Result |
+|---|---|
+| 1 ticket alone | ✅ completed — 3 for 3 (senior screener, example.com, Wikipedia) |
+| 6 staggered 20s apart | ⬛ all 6 **cancelled** |
+| 8 simultaneous | ❌ all 8 **failed in ~3 min** |
+
+**The contradiction:** 15–20 min/ticket makes ActionLayer unusable for a consumer
+concierge and ideal for overnight back-office batch work. That is the use case the
+latency selects for. But the platform currently cancels or fails concurrent tickets —
+so the one shape that fits the latency is the one shape it can't do today.
+
+That is not a complaint. It is the highest-value thing we learned, and it is
+actionable: raise per-account concurrency and the batch use case opens up.

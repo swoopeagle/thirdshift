@@ -110,7 +110,7 @@ def cmd_watch():
         with ThreadPoolExecutor(max_workers=8) as ex:
             got = list(ex.map(lambda r: http(f"{AL_URL}/tasks/{r['ticket']}") if r["ticket"] else {}, rows))
         if not first:
-            print(f"\033[{len(rows)+7}A", end="")
+            print(f"\033[{len(rows)+8}A", end="")
         first = False
         el = int(time.time() - started)
         done = sum(1 for t in got if t.get("state") in ("completed", "failed", "cancelled"))
@@ -129,7 +129,8 @@ def cmd_watch():
             print(f"\033[2K  {r['id']:<5}{profile(r['rec']):<30}{col}{s:<16}{X}{res}")
         print(f"\033[2K{D}  {'─'*86}{X}")
         qual = sum(1 for t in got if t.get("state") == "completed")
-        print(f"\033[2K  {G}{B}{qual}{X} screened   {D}· one navigator does ~6-8 of these an hour by hand{X}")
+        print(f"\033[2K  {G}{B}{qual}{X} screened   {D}· a SNAP navigator does ~6-8 of these an hour by hand{X}")
+        print(f"\033[2K{D}  run sequentially — ActionLayer cancels/fails concurrent tickets (measured 18:52 & 18:55){X}")
         if done == len(rows):
             print(f"\n{G}{B}  batch complete.{X}")
             json.dump({"rows": rows, "results": got}, open(os.path.join(HERE, "batch_results.json"), "w"), indent=1)
