@@ -62,6 +62,20 @@
    "state": "cancelled",
    "proves": "CONCURRENCY: one of 6 fired 20s apart -> all 6 cancelled",
    "outcome": ""
+  },
+  {
+   "ticket": "tkt_os-NZoZVT6Q_-w8vPo7ovA",
+   "state": "blocked_on_user",
+   "proves": "PLANT VERTICAL: 29 min on bot-hostile McMaster, ZERO ambiguity questions (the specified goal held), then the login wall -> escalated instead of quitting. Residual wall on a B2B catalog is auth, not ambiguity.",
+   "outcome": "info_request: 'Kindly provide login credentials for the website to enable viewing of product details' (expires 3h)",
+   "instruction": "Find a sealed deep-groove ball bearing equivalent to 6203-2RS: 17mm bore, 40mm outer diameter, 12mm width, double rubber seals. Return the McMaster-Carr part number, unit price in USD, and whether it is in stock."
+  },
+  {
+   "ticket": "tkt_8hDAny1kyyDvj6ewMii77w",
+   "state": "pending",
+   "proves": "RECOVERY LAYER: --rebate goal live on pge.com, read-only",
+   "outcome": "in flight at ledger time",
+   "instruction": "Search PG&E's California business rebate pages for programs covering replacement of a 5 HP pump motor with a NEMA Premium efficiency motor installed on 2026-07-10; return the applicable program name, rebate amount, required documentation, and filing deadline. Read-only - do not create accounts or submit applications."
   }
  ]
 }

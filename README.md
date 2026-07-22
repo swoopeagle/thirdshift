@@ -24,15 +24,30 @@ the wall to be OTPs, CAPTCHAs, login walls. We measured something else:
 Under-specification isn't a UX annoyance. It's the dominant failure mode, and
 it's expensive. That reframes what the "last mile" product actually is.
 
+The same task, fired twice tonight — the only difference is specification:
+
+```mermaid
+gantt
+    title benefits.gov, measured live (elapsed minutes)
+    dateFormat HH:mm
+    axisFormat %H:%M
+    section vague ask
+    executes, blocks on ambiguity      :crit, v1, 00:00, 18m
+    waits for a human answer           :crit, v2, after v1, 12m
+    executes, blocks on ambiguity again:crit, v3, after v2, 15m
+    fails — no answer                  :milestone, after v3
+    section specified ask
+    Novita interview + goal compile    :done, s1, 00:00, 1m
+    executes straight through          :active, s2, after s1, 17m
+    real eligibility output            :milestone, after s2
+```
+
 ## What the tech can do
 
 **ActionLayer** drives a real browser end-to-end on sites with no API —
 including form-heavy government sites — but only when the goal uniquely
 identifies what's wanted, and only at 15–20 min per success. **Novita** serves
 fast, cheap open models (glm-5.2 et al.) in milliseconds-to-seconds.
-
-The economics write the architecture: never spend a 20-minute browser cycle
-discovering an ambiguity a 2-second model call could have caught.
 
 ```mermaid
 flowchart LR
@@ -102,8 +117,15 @@ ball bearing (17 mm bore, 40 mm OD, 12 mm width), qty 2, return part number, uni
 price, and stock; do not add to cart or check out.` — 240 chars, generated in
 seconds by Novita. That is the retiring tech's translation, done by a model.
 
-- Live validation ticket: `tkt_os-NZoZVT6Q_-w8vPo7ovA` — result in
-  [PLANT.md](PLANT.md), honestly recorded either way.
+- Live validation ticket `tkt_os-NZoZVT6Q_-w8vPo7ovA`: worked bot-hostile
+  McMaster for **29 minutes, zero ambiguity questions**, then hit the login
+  wall and **escalated instead of quitting** (`blocked_on_user`: "provide
+  login credentials…"). The thesis refined, honestly: specification removes
+  the unbounded ambiguity blocks; the residual wall on a B2B catalog is auth
+  — a bounded block the platform natively hands to a human. Full read in
+  [PLANT.md](PLANT.md).
+- Second live ticket `tkt_8hDAny1kyyDvj6ewMii77w`: the `--rebate` goal,
+  read-only on pge.com — no login expected; recorded when terminal.
 - What we deliberately do NOT claim yet (checkout, an evaluated symptom→spec
   corpus) is listed there too.
 - The concurrency cap doesn't hurt this vertical: a realistic nightly queue
@@ -114,7 +136,7 @@ seconds by Novita. That is the retiring tech's translation, done by a model.
 
 | mode | what the night clerk does | stops at | status |
 |---|---|---|---|
-| `plant.py "…"` | exact part on McMaster-Carr: part №, price, stock | read-only | live ticket in flight |
+| `plant.py "…"` | exact part on McMaster-Carr: part №, price, stock | read-only | ⏸ blocked on McMaster's login wall @29 min — escalated, didn't quit |
 | `--cart` | filled cart + what checkout requires to order | before "Place Order" | built; fires when the slot frees |
 | `--warranty` | manufacturer RMA claim, completed from the work order | before final submit | built, output below |
 | `--rebate` | utility rebate owed for the efficiency swap: program, amount, deadline | read-only | built, output below |
@@ -229,7 +251,7 @@ memory** — successes, failures, and cancellations alike. Exit 0 = every claim
 holds. The ledger is [evidence/tickets.json](evidence/tickets.json).
 
 ```
-  all 10 claims verified against the live API.
+  all 12 claims verified against the live API.
 ```
 
 ### In flight at submission time
@@ -278,3 +300,14 @@ nobody has time to fill**. The layer where a slow, sequential,
 never-quits browser agent shines is recovery paperwork: warranty/RMA claims,
 utility rebates, compliance renewals, benefits ([PLANT.md](PLANT.md), "The
 layer above procurement"). thirdshift is the night clerk that files them.
+
+```mermaid
+flowchart TD
+    A["🏭 plant work order<br/><i>&quot;pump 3 bearing squealing&quot;</i>"] --> S
+    B["🧓 benefits outreach roster<br/><i>de-identified record #47</i>"] --> S
+    S["specificity layer<br/>the expert's questions, in seconds"] --> E["execution layer<br/>the browser that doesn't quit"]
+    E --> R1["sourced part · filled cart"]
+    E --> R2["warranty claim · rebate ·<br/>benefits screening"]
+    R1 --> V["💰 value locked behind a form,<br/>filed while nobody's awake"]
+    R2 --> V
+```

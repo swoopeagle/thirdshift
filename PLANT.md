@@ -114,10 +114,20 @@ down line is the most expensive hour in the plant.
 
 | Test | Ticket | Result |
 |---|---|---|
-| Specificity layer: vague work order + tech-answerable facts → one imperative sourcing goal (226 chars) | — | ✅ works, [plant.py](plant.py) `--dry` |
-| McMaster-Carr read-only sourcing: sealed 6203-2RS equiv., 17×40×12mm → part number, price, stock | `tkt_os-NZoZVT6Q_-w8vPo7ovA` | _in flight — recorded here when terminal_ |
+| Specificity layer: vague work order + tech-answerable facts → one imperative goal, all four modes | — | ✅ works, [plant.py](plant.py) `--dry` |
+| McMaster-Carr read-only sourcing: sealed 6203-2RS equiv., 17×40×12mm → part number, price, stock | `tkt_os-NZoZVT6Q_-w8vPo7ovA` | ⏸ **blocked_on_user at minute 29 — asking for login credentials**, zero ambiguity questions. See below. |
+| PG&E rebate lookup (read-only, `--rebate` goal) | `tkt_8hDAny1kyyDvj6ewMii77w` | _in flight — recorded when terminal_ |
 
-**Result:** _pending_
+**The McMaster result, read honestly:** the agent worked a famously bot-hostile
+catalog for 29 minutes without quitting and without a single clarifying
+question — the specified goal held. The wall it hit is McMaster's login
+requirement for product/pricing detail, and the agent's response was the
+escalation channel working as designed: `blocked_on_user`, one question, a
+3-hour window for a human to answer. This *refines* the thesis: on government
+form portals the residual wall was ambiguity; on a B2B catalog it's auth.
+Specification eliminates the unbounded block class; what remains is a bounded,
+known one (a credential hand-off the platform natively supports). Rung 1 on
+McMaster therefore requires a facility account — which real facilities have.
 
 ## Honest scope
 
