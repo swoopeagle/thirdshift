@@ -9,7 +9,8 @@ This file is the sharpened case plus tonight's live validation._
 CMMS software (MaintainX, Limble, UpKeep) is excellent at *logging* that pump
 3 is down — and then it stops, because between "work order opened" and "part
 on the bench" sits a human translating a symptom into a catalog spec and
-clicking through a supplier site that has no API at this company's size.
+clicking through a supplier site with no self-serve ordering API at this
+company's size.
 
 ## The buyer
 
@@ -30,15 +31,52 @@ one" is retiring out of the industry. That translation is the product.
    wasted 20-minute cycle.
 2. **The latency selects the use case.** 15–20 min/ticket kills consumer
    concierge. Parts sourced overnight are on the bench for first shift.
-3. **The catalog has no API for this buyer.** McMaster's integration path
-   (punchout) is enterprise-ERP only. For everyone else the browser is the
-   only interface — precisely ActionLayer's territory.
+3. **The catalog has no self-serve ordering API for this buyer.** McMaster's
+   Product Information API is approval-gated, data-only (no ordering); its
+   punchout/cXML path assumes an existing e-procurement system. For a small
+   buyer the browser is the only way to *order* — precisely ActionLayer's
+   territory. (Sources and grades: [RESEARCH.md](RESEARCH.md).)
 4. **A work-order queue drains overnight even at concurrency 1.** We measured
    the platform cap tonight (8 simultaneous → failed; 6 staggered →
    cancelled; 1 alone → completed). That cap kills real-time fan-out — but a
    realistic nightly queue of ~20 work orders × 15–20 min each fits inside a
    single night shift running strictly sequentially. Of the shapes we tried
    tonight, this is the one the platform can serve *as it exists today*.
+
+## Problem, validated (sources + honesty grades: [RESEARCH.md](RESEARCH.md))
+
+- Unplanned downtime costs the world's 500 largest manufacturers ~$1.4T/yr
+  (~11% of revenue); an automotive line loses up to $2.3M/hr — Siemens
+  "True Cost of Downtime 2024". _(Fortune-500 figures; we extrapolate to
+  small facilities and say so.)_
+- Deloitte + The Manufacturing Institute (2024): up to 3.8M manufacturing
+  workers needed by 2033, ~1.9M jobs likely unfilled, boomer retirement a
+  named driver. _(The "retiring senior tech" is our framing on top.)_
+- Global MRO market ~$700–770B (2025); MRO is textbook unmanaged tail spend.
+- Verified on MaintainX's own feature pages: leading CMMS platforms stop at
+  low-stock alerts and PO paperwork — none source parts from suppliers. The
+  work-order → part-ordered gap is real.
+
+## Pushing ActionLayer to its ceiling (the repositioning)
+
+Read-only price extraction is ActionLayer's *weakest* mode — a scraper could
+do it, and 15–20 min for a price check flatters nobody. Its actual
+differentiators are the transactional steps other agents quit at: multi-step
+checkout incl. 3DS, login walls (it asks the human for credentials mid-flow),
+CAPTCHAs, budget-capped spending (`max_budget_usd`), multi-site jobs with
+hand-offs (`create_job`). So the deliverable is repositioned:
+
+| Rung | Deliverable | Status |
+|---|---|---|
+| 1 | Part number, price, stock (read-only) | ticket in flight tonight |
+| 2 | **Filled cart + checkout requirements** (stops before the order) | `--cart` mode built; fires when the concurrency slot frees |
+| 3 | Placed order under `max_budget_usd`, human go per order | needs an account + explicit approval — designed, not claimed |
+| 4 | Multi-site job: McMaster + Grainger + Zoro, buy cheapest in-stock | `create_job` hand-offs — v2 |
+
+`blocked_on_user` gets repositioned too: it's not a failure mode, it's the
+escalation channel — the agent asking the maintenance manager the one question
+("shielded or sealed?") instead of quitting, exactly like the junior tech
+texting the retired one.
 
 ## The metric that sells it
 

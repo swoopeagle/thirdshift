@@ -76,7 +76,9 @@ Small facilities never had that person: the maintenance manager IS procurement.
 Same two layers, zero new infrastructure, pointed at
 industrial maintenance. "Bearing on pump 3 is squealing" → the specificity
 layer asks what the retiring senior tech would ask → exact spec → ActionLayer
-sources it on McMaster-Carr, which has **no API for small buyers**. Read-only
+sources it on McMaster-Carr, which has **no self-serve ordering API for small
+buyers** (their data API is approval-gated and order-less; punchout assumes an
+ERP — see [RESEARCH.md](RESEARCH.md)). Read-only
 by design: part number, price, stock — a human approves the filled cart.
 
 **Measured:** `"bearing on pump 3 is squealing"` → `6203-2RS double rubber-sealed

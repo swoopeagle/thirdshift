@@ -10,9 +10,9 @@ proof. A maintenance work order is the purest form of the thesis:
 
 That translation is tribal knowledge that walks out the door when the senior
 tech retires. Novita does the translation (fast, cheap); ActionLayer executes
-against catalogs that have NO public API for small buyers — McMaster-Carr's
-punchout integration is enterprise-ERP only. For everyone else the browser
-is the only interface.
+against catalogs with no self-serve ORDERING API for small buyers —
+McMaster-Carr's data API is approval-gated and order-less; punchout assumes
+an ERP. For everyone else the browser is the only way to order.
 
 Why the 15-20 min/ticket latency is fine HERE and fatal for consumer
 concierge: parts sourced overnight are on the bench for tomorrow's first
@@ -56,6 +56,17 @@ McMaster-Carr part number, unit price in USD, and whether it is in stock. Read-o
 do not add to cart or check out. Include every spec. Under 400 characters.
 Output the sentence only."""
 
+# --cart mode: push the executor to its actual differentiator — the checkout.
+# Still stops short of the irreversible click; placing a real order needs a
+# human go, an account, and max_budget_usd on the ticket.
+CARTSYS = """You are a senior maintenance planner writing an instruction for a browser
+agent on mcmaster.com. From the work order and facts, infer the exact replacement part
+(standard designations, dimensions, seals/material). Write ONE imperative instruction:
+find that part, add the required quantity to the cart, and proceed through checkout up
+to but NOT including placing the order; return the part number, unit price, cart total,
+and exactly what checkout requires to place the order (login? guest? payment methods?).
+End with: Do not submit the order. Under 450 characters. Output the instruction only."""
+
 
 def main():
     args = sys.argv[1:]
@@ -82,8 +93,10 @@ def main():
         for q in plan.get("questions", [])[:4]:
             facts[q] = input(f"  {q}\n  {B}▸ {X}").strip()
 
-    print(f"\n{C}{B}  SPECIFIED SOURCING GOAL{X}")
-    goal = novita(GOALSYS, f"Work order: {ask}\nFacts: {json.dumps(facts)}", 3000)
+    cart = "--cart" in args
+    print(f"\n{C}{B}  SPECIFIED {'CART' if cart else 'SOURCING'} GOAL{X}")
+    goal = novita(CARTSYS if cart else GOALSYS,
+                  f"Work order: {ask}\nFacts: {json.dumps(facts)}", 3000)
     goal = goal.strip().strip('"')
     print(f"{G}  {goal}{X}")
     print(f"{D}  {len(goal)} chars{X}")
