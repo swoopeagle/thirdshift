@@ -62,9 +62,35 @@ concurrency and the batch use case opens up.
 
 ## How we solved it — two verticals, one architecture
 
-### 1. De-identified batch SNAP screening for seniors ([SCOPE.md](SCOPE.md), [batch.py](batch.py))
+### 1. Plant maintenance manager ([PLANT.md](PLANT.md), [plant.py](plant.py))
 
-~9M adults 65+ are eligible for SNAP and not enrolled; the #1 cited barrier is
+Unplanned downtime is the most expensive thing in a plant, and the bottleneck
+between "machine is down" and "part is ordered" is a human translating a symptom
+into a catalog spec. That translation is tribal knowledge, and it is retiring.
+Small facilities never had that person: the maintenance manager IS procurement.
+
+Same two layers, zero new infrastructure, pointed at
+industrial maintenance. "Bearing on pump 3 is squealing" → the specificity
+layer asks what the retiring senior tech would ask → exact spec → ActionLayer
+sources it on McMaster-Carr, which has **no API for small buyers**. Read-only
+by design: part number, price, stock — a human approves the filled cart.
+
+**Measured:** `"bearing on pump 3 is squealing"` → `6203-2RS double rubber-sealed
+ball bearing (17 mm bore, 40 mm OD, 12 mm width), qty 2, return part number, unit
+price, and stock; do not add to cart or check out.` — 240 chars, generated in
+seconds by Novita. That is the retiring tech's translation, done by a model.
+
+- Live validation ticket: `tkt_os-NZoZVT6Q_-w8vPo7ovA` — result in
+  [PLANT.md](PLANT.md), honestly recorded either way.
+- What we deliberately do NOT claim yet (checkout, an evaluated symptom→spec
+  corpus) is listed there too.
+- The concurrency cap doesn't hurt this vertical: a realistic nightly queue
+  of work orders drains **sequentially** — 15–20 min × 20 work orders fits
+  inside a single night shift with the cap exactly as it is today.
+
+### 2. De-identified batch SNAP screening for seniors ([SCOPE.md](SCOPE.md), [batch.py](batch.py))
+
+The vertical where we have a **completed end-to-end run**. ~9M adults 65+ are eligible for SNAP and not enrolled; the #1 cited barrier is
 the burden of applying. An org that already holds a roster (food bank, Area
 Agency on Aging, PHA) hands over **de-identified** records — eligibility is
 determined by age/household/income/rent/state, none of which identify anyone —
@@ -79,22 +105,6 @@ and we screen the whole roster overnight, in parallel.
 - The PII answer is structural: **the agent never sees a person.**
 - The 15–20 min latency that kills consumer concierge is irrelevant overnight
   — the latency *selects* the use case.
-
-### 2. Plant maintenance manager ([PLANT.md](PLANT.md), [plant.py](plant.py))
-
-The generality proof: same two layers, zero new infrastructure, pointed at
-industrial maintenance. "Bearing on pump 3 is squealing" → the specificity
-layer asks what the retiring senior tech would ask → exact spec → ActionLayer
-sources it on McMaster-Carr, which has **no API for small buyers**. Read-only
-by design: part number, price, stock — a human approves the filled cart.
-
-- Live validation ticket: `tkt_os-NZoZVT6Q_-w8vPo7ovA` — result in
-  [PLANT.md](PLANT.md), honestly recorded either way.
-- What we deliberately do NOT claim yet (checkout, an evaluated symptom→spec
-  corpus) is listed there too.
-- The concurrency cap doesn't hurt this vertical: a realistic nightly queue
-  of work orders drains **sequentially** — 15–20 min × 20 work orders fits
-  inside a single night shift with the cap exactly as it is today.
 
 ## Prove it
 
@@ -114,9 +124,10 @@ holds. The ledger is [evidence/tickets.json](evidence/tickets.json).
 ## Run it
 
 ```bash
-python3 snap.py "my mom needs help with groceries"     # single applicant, interview mode
-python3 batch.py fire && python3 batch.py watch        # de-identified roster fan-out
 python3 plant.py "bearing on pump 3 is squealing"      # maintenance vertical
+python3 plant.py "..." --dry                           # specificity layer only, ~4s, no ticket
+python3 snap.py  "my mom needs help with groceries"    # benefits vertical, interview mode
+python3 verify.py                                      # re-verify every claim, live
 ```
 
 Zero dependencies — Python stdlib only. Needs `.env` with `NOVITA_API_KEY`,
