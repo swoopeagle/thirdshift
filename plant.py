@@ -11,7 +11,8 @@ proof. A maintenance work order is the purest form of the thesis:
 That translation is tribal knowledge that walks out the door when the senior
 tech retires. Novita does the translation (fast, cheap); ActionLayer executes
 against catalogs that have NO public API for small buyers — McMaster-Carr's
-punchout integration is enterprise-ERP only, TaskRabbit has no API at all.
+punchout integration is enterprise-ERP only. For everyone else the browser
+is the only interface.
 
 Why the 15-20 min/ticket latency is fine HERE and fatal for consumer
 concierge: parts sourced overnight are on the bench for tomorrow's first

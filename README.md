@@ -90,8 +90,11 @@ by design: part number, price, stock — a human approves the filled cart.
 
 - Live validation ticket: `tkt_os-NZoZVT6Q_-w8vPo7ovA` — result in
   [PLANT.md](PLANT.md), honestly recorded either way.
-- What we deliberately do NOT claim yet (TaskRabbit, checkout) is listed
-  there too.
+- What we deliberately do NOT claim yet (checkout, an evaluated symptom→spec
+  corpus) is listed there too.
+- The concurrency cap doesn't hurt this vertical: a realistic nightly queue
+  of work orders drains **sequentially** — 15–20 min × 20 work orders fits
+  inside a single night shift with the cap exactly as it is today.
 
 ## Prove it
 
