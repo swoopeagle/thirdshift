@@ -1,4 +1,8 @@
-# lastmile — the last mile isn't authentication, it's specification
+# thirdshift — the shift nobody staffs
+
+> The last mile isn't authentication. It's specification.
+
+Third shift files the specs; first shift finds the part on the bench.
 
 _Last Mile Agent Hackathon, AWS Builder Loft SF, 2026-07-21. Novita (inference)
 + ActionLayer (browser execution). Everything below is measured tonight, live —
@@ -105,6 +109,34 @@ and we screen the whole roster overnight, in parallel.
 - The PII answer is structural: **the agent never sees a person.**
 - The 15–20 min latency that kills consumer concierge is irrelevant overnight
   — the latency *selects* the use case.
+
+## What it looks like
+
+Real output, not a mockup — `python3 plant.py "bearing on pump 3 is squealing" --facts workorder.json --dry`:
+
+```
+════════════════════════════════════════════════════════════
+  THE WORK ORDER
+  "bearing on pump 3 is squealing"
+  → a catalog search on this blocks or buys the wrong part
+
+  SPECIFIED SOURCING GOAL
+  Find a 6203-2RS double rubber-sealed ball bearing (17mm bore, 40mm OD,
+  12mm width) on mcmaster.com and return the McMaster-Carr part number,
+  unit price in USD, and whether it is in stock—read-only, do not add to
+  cart or check out.
+  230 chars
+
+════════════════════════════════════════════════════════════
+  "bearing is squealing" → wrong part, second truck roll
+  exact spec → part number, price, stock — on the bench by first shift
+════════════════════════════════════════════════════════════
+```
+
+The interview mode asks the technician the 2–4 questions the retiring senior
+tech would have asked (equipment, markings/dimensions, quantity, urgency) —
+each answerable in a few words — before compiling the goal. Without `--dry`,
+that goal fires as a live browser ticket and the CLI tails it to terminal state.
 
 ## Prove it
 
