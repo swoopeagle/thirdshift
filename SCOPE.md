@@ -18,10 +18,29 @@ Anyone handing a real-world task to an agent — but concretely, the person who 
 
 ## Core Interaction
 
-A user makes a **deliberately vague** request. The Novita layer interrogates it into a goal
-that uniquely identifies what they want. ActionLayer executes it. The user sees the
-before/after — the vague ask that would have burned 20 minutes, and the specified ask that
-completed.
+An organization that already holds a roster of likely-eligible seniors hands over
+**de-identified** records. We screen the whole roster at once — 8 in parallel, same
+wall-clock as 1 — and hand back which records likely qualify. The org holds the mapping.
+
+**The PII architecture (load-bearing):** SNAP eligibility is determined by age, household
+size, income, assets, housing cost, state, disability status. None of those are identifiers.
+Screening sends `#47 — 68, CA, household of 1, $1,150/mo, $900 rent` and gets back
+`likely qualifies: SNAP, MSP, LIHEAP`. The agent never sees a name, SSN, address, or DOB.
+Asked about privacy on stage, the answer is the demo: there is nothing to protect, because
+the screening never sees a person. Identified data appears only later, in the low-volume,
+consented, human-supervised application step (SNAP's authorized-representative provision).
+
+**Why batch, not single-applicant:** the senior who most needs this is the least likely to
+open a terminal. And 15–20 min/ticket kills a consumer concierge but is irrelevant for
+overnight back-office work. The latency stops being an apology and becomes the thing that
+*selects* the use case.
+
+**Buyers, ranked by roster × income data × incentive × speed-to-pilot:** food banks with
+existing SNAP outreach (fastest) → Area Agencies on Aging → PACE → senior housing/PHAs
+(income-verified annually) → D-SNP plans (biggest, slowest; they reduce their own medical
+spend when members enroll). Hospitals have the data, brutal compliance drag. Churches are a
+weak data channel but the strongest trust channel — pair church-as-consent with
+food-bank-as-data.
 
 ## The demo — SNAP screening for seniors
 
@@ -60,8 +79,8 @@ test was flawed — we asked it to *write a report about navigating* rather than
 - Slack integration / clew wiring. Needs a Railway deploy; would eat the entire window.
   It's the product this implies, not tonight's build.
 - Any payment, booking, account creation, or PII.
-- More than **two** ActionLayer tickets during the window. At 15–20 min each that is the
-  hard budget.
+- More than **two sequential rounds** of ActionLayer tickets. Parallel fan-out within a
+  round is free (same wall-clock), so the cap is on rounds, not count.
 - A live on-stage ActionLayer run as the spine of the demo. Record it; narrate the recording.
 - Retry-on-failure logic, error taxonomy, persistence, tests. Not a product tonight.
 
@@ -92,3 +111,4 @@ Add scope only if:
 | 07-21 18:22 | Funny surface over serious one | **Accepted** | 3-min slot, 8pm room; comedy is in the measured finding itself |
 | 07-21 18:22 | imgflip meme generator | **Accepted** | ActionLayer's own docs cite it; benign; visual artifact |
 | 07-21 18:45 | Pivot to SNAP/seniors over bees + meme | **Accepted** | 9M eligible seniors unenrolled; #1 barrier is application burden; ClarityCare judges are healthcare |
+| 07-21 18:50 | Pivot single-applicant → de-identified batch | **Accepted** | Latency flips from liability to fit; parallel fan-out costs no extra wall-clock so the two-ticket cap (a time constraint, not a count) is not violated; orgs already staff this work manually |

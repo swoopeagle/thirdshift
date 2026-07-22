@@ -67,6 +67,7 @@ def http(url, payload=None, headers=None, method=None, timeout=90):
         url, data=data, method=method or ("POST" if data else "GET")
     )
     req.add_header("Content-Type", "application/json")
+    req.add_header("User-Agent", "lastmile/1.0")  # Python-urllib UA gets 403d
     for k, v in (headers or {}).items():
         req.add_header(k, v)
     try:

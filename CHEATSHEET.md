@@ -93,3 +93,13 @@ Two for two. The only successes all afternoon were trivial read-only pages
 (wikipedia, example.com). **Do NOT stage the demo on a government portal.**
 Pick a site you have personally watched succeed, or demo the architecture and
 report the portal failures as the finding.
+
+## Gotcha 5 — Python-urllib User-Agent gets 403'd
+
+curl works, `urllib.request` gets `HTTP 403 Forbidden` on POST. Set any UA:
+`req.add_header("User-Agent", "lastmile/1.0")`. Cost us 5 min at 18:51.
+
+## Gotcha 6 — Novita models are REASONING models
+
+`reasoning_content` burns the token budget before `content` is emitted.
+`max_tokens=400` returns an empty string. Use 3000+.

@@ -1,0 +1,10 @@
+[
+  {"id": "#47", "age": 68, "state": "CA", "household": 1, "income": 1150, "rent": 900,  "assets": "none", "disability": false},
+  {"id": "#48", "age": 74, "state": "CA", "household": 1, "income": 980,  "rent": 1100, "assets": "none", "disability": true},
+  {"id": "#49", "age": 71, "state": "CA", "household": 2, "income": 1840, "rent": 1400, "assets": "none", "disability": false},
+  {"id": "#50", "age": 66, "state": "CA", "household": 1, "income": 1420, "rent": 750,  "assets": "under $2,000", "disability": false},
+  {"id": "#51", "age": 82, "state": "CA", "household": 1, "income": 1075, "rent": 0,    "assets": "none", "disability": true},
+  {"id": "#52", "age": 69, "state": "CA", "household": 3, "income": 2210, "rent": 1650, "assets": "none", "disability": false},
+  {"id": "#53", "age": 77, "state": "CA", "household": 1, "income": 1310, "rent": 1000, "assets": "under $2,000", "disability": false},
+  {"id": "#54", "age": 65, "state": "CA", "household": 2, "income": 1690, "rent": 1250, "assets": "none", "disability": true}
+]
