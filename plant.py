@@ -8,8 +8,9 @@ queue drains overnight; first shift finds the results on the bench.
 
 MODES — one queue, four things the night clerk does with it:
 
-  (default)   source a part on mcmaster.com — part number, price, stock.
-              Read-only.
+  (default)   source a part on a distributor's catalog — part number, price,
+              stock. Read-only. --supplier picks the catalog (mcmaster,
+              grainger, zoro, motion); nothing else about the run changes.
   --cart      add to cart and drive checkout UP TO but not including placing
               the order; report what the order requires. The executor's real
               differentiator, minus the irreversible click.
@@ -24,6 +25,7 @@ front of it. Slow-tolerant, login-walled, form-heavy — exactly the shape the
 executor completed end-to-end tonight (benefits.gov, see WIN.md).
 
   python3 plant.py "bearing on pump 3 is squealing"
+  python3 plant.py "..." --supplier grainger --facts workorder.json --dry
   python3 plant.py "..." --facts workorder.json --dry
   python3 plant.py "pump 3 bearing failed in warranty" --warranty --facts warranty.json --dry
   python3 plant.py "replaced pump 3 motor with premium-efficiency" --rebate --facts rebate.json --dry
@@ -43,26 +45,36 @@ PLANNER = """You are a senior maintenance planner writing an instruction for a
 browser agent. {job} Write ONE imperative instruction. Include every fact given.
 {stop} Under 450 characters. Output the instruction only."""
 
+# Sourcing is not wired to one catalog. Same goal, same code path, different
+# distributor — the executor takes any URL, so the only thing that changes is
+# the domain and what that distributor calls its part number.
+SUPPLIERS = {
+    "mcmaster": ("https://www.mcmaster.com", "mcmaster.com", "McMaster-Carr part number"),
+    "grainger": ("https://www.grainger.com", "grainger.com", "Grainger item number"),
+    "zoro":     ("https://www.zoro.com",     "zoro.com",     "Zoro part number"),
+    "motion":   ("https://www.motion.com",   "motion.com",   "Motion part number"),
+}
+
 MODES = {
     "sourcing": {
-        "url": "https://www.mcmaster.com",
+        "url": "supplier",
         "facts": "equipment, symptom, part_markings_or_dimensions, quantity, urgency",
         "job": "From the work order and facts, infer the exact replacement part the way "
                "an experienced tech would (standard designations, dimensions, seals, "
-               "material). Instruct the agent to find that part on mcmaster.com and "
-               "return the McMaster-Carr part number, unit price in USD, and whether "
+               "material). Instruct the agent to find that part on {domain} and "
+               "return the {idname}, unit price in USD, and whether "
                "it is in stock.",
         "stop": "Read-only — do not add to cart or check out.",
         "flavor": ("\"bearing is squealing\" → wrong part, second truck roll",
                    "exact spec → part number, price, stock — on the bench by first shift"),
     },
     "cart": {
-        "url": "https://www.mcmaster.com",
+        "url": "supplier",
         "facts": "equipment, symptom, part_markings_or_dimensions, quantity, urgency",
         "job": "From the work order and facts, infer the exact replacement part. "
-               "Instruct the agent to find it on mcmaster.com, add the required "
+               "Instruct the agent to find it on {domain}, add the required "
                "quantity to the cart, proceed through checkout up to but NOT including "
-               "placing the order, and return the part number, unit price, cart total, "
+               "placing the order, and return the {idname}, unit price, cart total, "
                "and exactly what checkout requires to place the order (login? guest? "
                "payment methods?).",
         "stop": "End the instruction with: Do not submit the order.",
@@ -119,6 +131,11 @@ def main():
     ask = args[0]
     facts_path = args[args.index("--facts") + 1] if "--facts" in args else None
 
+    sup = args[args.index("--supplier") + 1].lower() if "--supplier" in args else "mcmaster"
+    if sup not in SUPPLIERS:
+        raise SystemExit(f"unknown supplier {sup!r} — choose from: {', '.join(SUPPLIERS)}")
+    sup_url, domain, idname = SUPPLIERS[sup]
+
     print(f"\n{B}{'═'*60}{X}")
     print(f"{R}{B}  THE WORK ORDER{X}  {D}[{mode}]{X}")
     print(f"  \"{ask}\"")
@@ -136,14 +153,18 @@ def main():
     print(f"\n{C}{B}  SPECIFIED {mode.upper()} GOAL{X}")
     # recovery-mode prompts run longer chains of reasoning — 3000 sometimes
     # comes back empty (reasoning_content eats the budget; see snap.py note)
-    goal = novita(PLANNER.format(job=cfg["job"], stop=cfg["stop"]),
+    job = cfg["job"].format(domain=domain, idname=idname)
+    goal = novita(PLANNER.format(job=job, stop=cfg["stop"]),
                   f"Work order: {ask}\nFacts: {json.dumps(facts)}", 6000)
     goal = goal.strip().strip('"')
     print(f"{G}  {goal}{X}")
     print(f"{D}  {len(goal)} chars{X}")
 
     url = cfg["url"]
-    if url is None:
+    if url == "supplier":
+        url = sup_url
+        print(f"{D}  target: {url}{X}")
+    elif url is None:
         kind = "manufacturer's site" if mode == "warranty" else "utility provider's site"
         url = novita(URLSYS.format(kind=kind), json.dumps(facts), 2000).strip()
         print(f"{D}  target: {url}{X}")

@@ -58,13 +58,27 @@ One queue, four night-clerk moves:
 
 | mode | what the night clerk does | stops at |
 |---|---|---|
-| `plant.py "…"` | exact part on McMaster-Carr: part №, price, stock | read-only |
+| `plant.py "…"` | exact part on a distributor catalog: part №, price, stock | read-only |
 | `--cart` | filled cart + what checkout requires to order | before "Place Order" |
 | `--warranty` | manufacturer RMA claim, completed from the work order | before final submit |
 | `--rebate` | utility rebate owed for the efficiency swap: program, amount, deadline | read-only |
 
 Every mode stops before the irreversible click. The human signs; the night
 clerk did everything up to the signature.
+
+**No supplier is hardcoded.** `--supplier mcmaster|grainger|zoro|motion`
+repoints the same work order at a different catalog, and the compiler adapts
+the goal to it — "Grainger item number" against grainger.com, "McMaster-Carr
+part number" against mcmaster.com, from one work order and one code path. The
+recovery modes go further and take no target at all: Novita resolves the
+manufacturer's support site and the utility's rebate portal from the facts,
+which is how Grundfos and PG&E came out of the same code without either being
+named in it. Try all four in about four seconds each:
+
+```bash
+python3 plant.py "bearing on pump 3 is squealing" --supplier grainger --facts workorder.json --dry
+python3 plant.py "bearing on pump 3 is squealing" --supplier zoro     --facts workorder.json --dry
+```
 
 The recovery modes go after money the facility already owns and never
 collects, because a portal form stands in front of it. Nobody files an RMA
@@ -163,6 +177,14 @@ thesis instead of confirming it. Specification eliminates the unbounded
 ambiguity blocks; what's left on a B2B catalog is auth, which is a bounded
 block the platform hands to a human and a real facility account resolves.
 Full read in [PLANT.md](PLANT.md).
+
+**Across suppliers**, the split is clean and worth stating precisely. The
+specificity layer is proven on all of them — McMaster, Grainger, and Zoro
+each compile a correct, distributor-specific goal in seconds, reproducible
+offline with `--dry` and no ticket required. Execution is proven on McMaster
+to the auth wall described above. A Grainger execution ticket
+(`tkt_fI0oixBm1IWKIkvJKCmHaA`) is in flight as of this writing and stays out
+of the ledger until it's terminal, like every other pending ticket here.
 
 **The concurrency envelope** ([WIN.md](WIN.md)): 8 simultaneous tickets all
 failed in ~3 min, 6 staggered 20 s apart were all cancelled, 1 alone
@@ -283,6 +305,7 @@ yourself: `./al.sh get tkt_os-NZoZVT6Q_-w8vPo7ovA`
 
 ```bash
 python3 plant.py "bearing on pump 3 is squealing"      # source the part (read-only)
+python3 plant.py "..." --supplier grainger             # same work order, different catalog
 python3 plant.py "..." --cart                          # fill cart, stop before the order
 python3 plant.py "pump 3 bearing failed in warranty" --warranty   # complete the RMA form
 python3 plant.py "swapped pump 3 motor for premium-eff" --rebate  # find the rebate owed
