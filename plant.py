@@ -1,30 +1,37 @@
 #!/usr/bin/env python3
 """
-plant.py — the specificity layer, pointed at plant maintenance.
+plant.py — thirdshift: the night clerk for the maintenance manager.
 
-Same architecture as snap.py, different vertical — this is the generality
-proof. A maintenance work order is the purest form of the thesis:
+Same two layers everywhere: specificity (Novita, seconds) → execution
+(ActionLayer, 15-20 min/ticket, concurrency 1 — measured). The work-order
+queue drains overnight; first shift finds the results on the bench.
 
-  the human says   "the bearing on pump 3 is squealing"
-  the catalog wants "6203-2RS, 17mm bore, 40mm OD, 12mm width, double sealed"
+MODES — one queue, four things the night clerk does with it:
 
-That translation is tribal knowledge that walks out the door when the senior
-tech retires. Novita does the translation (fast, cheap); ActionLayer executes
-against catalogs with no self-serve ORDERING API for small buyers —
-McMaster-Carr's data API is approval-gated and order-less; punchout assumes
-an ERP. For everyone else the browser is the only way to order.
+  (default)   source a part on mcmaster.com — part number, price, stock.
+              Read-only.
+  --cart      add to cart and drive checkout UP TO but not including placing
+              the order; report what the order requires. The executor's real
+              differentiator, minus the irreversible click.
+  --warranty  fill the manufacturer's warranty/RMA claim from the work order.
+              Stops before final submission — a human clicks submit.
+  --rebate    find the utility rebate owed for an efficiency replacement —
+              program, amount, documentation, deadline. Read-only.
 
-Why the 15-20 min/ticket latency is fine HERE and fatal for consumer
-concierge: parts sourced overnight are on the bench for tomorrow's first
-shift. Same latency-selects-the-use-case argument as batch.py.
+The recovery modes are the point: warranty claims, rebates, and compliance
+renewals are money already owed, unclaimed because a portal form stands in
+front of it. Slow-tolerant, login-walled, form-heavy — exactly the shape the
+executor completed end-to-end tonight (benefits.gov, see WIN.md).
 
   python3 plant.py "bearing on pump 3 is squealing"
-  python3 plant.py "..." --facts workorder.json   # skip interview
-  python3 plant.py "..." --dry                    # show goals, don't fire
+  python3 plant.py "..." --facts workorder.json --dry
+  python3 plant.py "pump 3 bearing failed in warranty" --warranty --facts warranty.json --dry
+  python3 plant.py "replaced pump 3 motor with premium-efficiency" --rebate --facts rebate.json --dry
   python3 plant.py --resume tkt_xxx
 
-Sourcing tickets are READ-ONLY by design: part number, price, stock — no
-checkout, no login, no spend. Purchasing is a human click on a filled cart.
+Every mode stops short of the irreversible step (order, submission) by
+design. Catalogs and portals at this buyer's size have no self-serve
+ordering/filing API — the browser is the only interface. That's the wedge.
 """
 import json, sys
 
@@ -32,40 +39,72 @@ from snap import (
     B, D, G, Y, R, C, X, novita, parse_json, al_fire, watch, MODEL,
 )
 
-PARTS_TARGET = "https://www.mcmaster.com"
+PLANNER = """You are a senior maintenance planner writing an instruction for a
+browser agent. {job} Write ONE imperative instruction. Include every fact given.
+{stop} Under 450 characters. Output the instruction only."""
 
-# What a work order needs before a catalog search can succeed. The interview
-# only asks for what the vague ask didn't already answer.
-FACTS = ["equipment", "symptom", "part_markings_or_dimensions", "quantity", "urgency"]
+MODES = {
+    "sourcing": {
+        "url": "https://www.mcmaster.com",
+        "facts": "equipment, symptom, part_markings_or_dimensions, quantity, urgency",
+        "job": "From the work order and facts, infer the exact replacement part the way "
+               "an experienced tech would (standard designations, dimensions, seals, "
+               "material). Instruct the agent to find that part on mcmaster.com and "
+               "return the McMaster-Carr part number, unit price in USD, and whether "
+               "it is in stock.",
+        "stop": "Read-only — do not add to cart or check out.",
+        "flavor": ("\"bearing is squealing\" → wrong part, second truck roll",
+                   "exact spec → part number, price, stock — on the bench by first shift"),
+    },
+    "cart": {
+        "url": "https://www.mcmaster.com",
+        "facts": "equipment, symptom, part_markings_or_dimensions, quantity, urgency",
+        "job": "From the work order and facts, infer the exact replacement part. "
+               "Instruct the agent to find it on mcmaster.com, add the required "
+               "quantity to the cart, proceed through checkout up to but NOT including "
+               "placing the order, and return the part number, unit price, cart total, "
+               "and exactly what checkout requires to place the order (login? guest? "
+               "payment methods?).",
+        "stop": "End the instruction with: Do not submit the order.",
+        "flavor": ("read-only lookups are scraper work",
+                   "a filled cart at 3am is the executor earning its keep"),
+    },
+    "warranty": {
+        "url": None,  # manufacturer portal — from facts
+        "facts": "manufacturer, product_model, serial_number, purchase_date, failure_description, invoice_reference",
+        "job": "The failed part is under manufacturer warranty. Instruct the agent to "
+               "go to the manufacturer's support site, locate the warranty/RMA claim "
+               "form, complete it from the facts, and return the claim reference or "
+               "the list of fields the final submission requires.",
+        "stop": "End the instruction with: Do not perform the final submission.",
+        "flavor": ("a $40 bearing claim nobody files is a donation to the vendor",
+                   "the work order already holds everything the claim form asks"),
+    },
+    "rebate": {
+        "url": None,  # utility portal — from facts
+        "facts": "utility_provider, facility_state, equipment_replaced, new_equipment_efficiency, install_date",
+        "job": "The facility replaced equipment with a higher-efficiency model, which "
+               "may qualify for a utility rebate. Instruct the agent to search the "
+               "utility's business rebate pages and return the applicable program "
+               "name, rebate amount, required documentation, and filing deadline.",
+        "stop": "Read-only — do not create accounts or submit applications.",
+        "flavor": ("the rebate expires quietly; the utility never reminds you",
+                   "same work order, second payout"),
+    },
+}
 
-SYSTEM = """You triage industrial maintenance work orders. Technicians are vague;
-parts catalogs are not. Return ONLY minified JSON, no prose, no code fences.
+INTERVIEW = """You triage industrial maintenance work orders. Technicians are vague;
+portals and catalogs are not. Return ONLY minified JSON, no prose, no code fences.
 
 Given a vague work order, return:
-{"missing": ["fact", ...], "questions": ["short question", ...]}
+{{"missing": ["fact", ...], "questions": ["short question", ...]}}
 
 Ask ONLY about these facts, and only ones the work order does not already answer:
-equipment (make/model), symptom, part_markings_or_dimensions, quantity, urgency.
+{facts}.
 Max 4 questions. Each answerable by a technician in a few words."""
 
-GOALSYS = """You are a senior maintenance planner writing a parts-sourcing instruction
-for a browser agent on mcmaster.com. From the work order and facts, infer the exact
-replacement part the way an experienced tech would (standard designations, dimensions,
-seals/material). Write ONE imperative sentence: find that part and return the
-McMaster-Carr part number, unit price in USD, and whether it is in stock. Read-only —
-do not add to cart or check out. Include every spec. Under 400 characters.
-Output the sentence only."""
-
-# --cart mode: push the executor to its actual differentiator — the checkout.
-# Still stops short of the irreversible click; placing a real order needs a
-# human go, an account, and max_budget_usd on the ticket.
-CARTSYS = """You are a senior maintenance planner writing an instruction for a browser
-agent on mcmaster.com. From the work order and facts, infer the exact replacement part
-(standard designations, dimensions, seals/material). Write ONE imperative instruction:
-find that part, add the required quantity to the cart, and proceed through checkout up
-to but NOT including placing the order; return the part number, unit price, cart total,
-and exactly what checkout requires to place the order (login? guest? payment methods?).
-End with: Do not submit the order. Under 450 characters. Output the instruction only."""
+URLSYS = """From these facts, return ONLY the most likely https:// homepage URL of the
+{kind}, nothing else. No prose."""
 
 
 def main():
@@ -75,40 +114,49 @@ def main():
     if not args:
         raise SystemExit(__doc__)
 
+    mode = next((m for m in MODES if f"--{m}" in args), "sourcing")
+    cfg = MODES[mode]
     ask = args[0]
     facts_path = args[args.index("--facts") + 1] if "--facts" in args else None
 
     print(f"\n{B}{'═'*60}{X}")
-    print(f"{R}{B}  THE WORK ORDER{X}")
+    print(f"{R}{B}  THE WORK ORDER{X}  {D}[{mode}]{X}")
     print(f"  \"{ask}\"")
-    print(f"{D}  → a catalog search on this blocks or buys the wrong part{X}")
 
     if facts_path:
         facts = json.load(open(facts_path))
     else:
         print(f"\n{C}{B}  NOVITA — what would the senior tech ask?{X}  {D}({MODEL}){X}")
-        plan = parse_json(novita(SYSTEM, ask, 3000))
+        plan = parse_json(novita(INTERVIEW.format(facts=cfg["facts"]), ask, 3000))
         print(f"{D}  missing: {', '.join(plan.get('missing', []))}{X}\n")
         facts = {}
         for q in plan.get("questions", [])[:4]:
             facts[q] = input(f"  {q}\n  {B}▸ {X}").strip()
 
-    cart = "--cart" in args
-    print(f"\n{C}{B}  SPECIFIED {'CART' if cart else 'SOURCING'} GOAL{X}")
-    goal = novita(CARTSYS if cart else GOALSYS,
-                  f"Work order: {ask}\nFacts: {json.dumps(facts)}", 3000)
+    print(f"\n{C}{B}  SPECIFIED {mode.upper()} GOAL{X}")
+    # recovery-mode prompts run longer chains of reasoning — 3000 sometimes
+    # comes back empty (reasoning_content eats the budget; see snap.py note)
+    goal = novita(PLANNER.format(job=cfg["job"], stop=cfg["stop"]),
+                  f"Work order: {ask}\nFacts: {json.dumps(facts)}", 6000)
     goal = goal.strip().strip('"')
     print(f"{G}  {goal}{X}")
     print(f"{D}  {len(goal)} chars{X}")
 
+    url = cfg["url"]
+    if url is None:
+        kind = "manufacturer's site" if mode == "warranty" else "utility provider's site"
+        url = novita(URLSYS.format(kind=kind), json.dumps(facts), 2000).strip()
+        print(f"{D}  target: {url}{X}")
+
+    lo, hi = cfg["flavor"]
     print(f"\n{B}{'═'*60}{X}")
-    print(f"  {R}\"bearing is squealing\"{X} → wrong part, second truck roll")
-    print(f"  {G}exact spec{X} → part number, price, stock — on the bench by first shift")
+    print(f"  {R}{lo}{X}")
+    print(f"  {G}{hi}{X}")
     print(f"{B}{'═'*60}{X}")
 
     if "--dry" in args:
         return
-    tid = al_fire(PARTS_TARGET, goal)
+    tid = al_fire(url, goal)
     print(f"\n{D}fired. resume anytime: python3 plant.py --resume {tid}{X}")
     watch(tid)
 

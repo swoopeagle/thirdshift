@@ -34,12 +34,28 @@ fast, cheap open models (glm-5.2 et al.) in milliseconds-to-seconds.
 The economics write the architecture: never spend a 20-minute browser cycle
 discovering an ambiguity a 2-second model call could have caught.
 
+```mermaid
+flowchart LR
+    WO["🔧 vague human ask<br/><i>&quot;bearing on pump 3 is squealing&quot;</i>"]
+    subgraph NOV["specificity layer — Novita · seconds"]
+        Q["interview: the 2–4 questions<br/>the senior tech would ask"]
+        G["compile ONE imperative goal<br/>&lt;480 chars, uniquely specified"]
+        Q --> G
+    end
+    subgraph AL["execution layer — ActionLayer · 15–20 min"]
+        EX["real browser drives the<br/>catalog / portal — doesn't quit"]
+        BU["⏸ blocked_on_user:<br/><i>&quot;shielded or sealed?&quot;</i>"]
+        EX <--> BU
+    end
+    WO --> Q
+    G --> EX
+    EX --> OUT["part № · price · stock<br/>filled cart · filed claim · rebate"]
 ```
-vague human ask
-   → Novita: interview — ask only what's missing, like the expert would
-   → Novita: compile facts into ONE imperative, fully-specified goal
-   → ActionLayer: execute (slow, expensive, but doesn't quit)
-```
+
+The economics write the architecture: never spend a 20-minute browser cycle
+discovering an ambiguity a 2-second model call could have caught. And
+`blocked_on_user` isn't a failure mode — it's the junior tech texting the
+retired one, at most one question per ticket.
 
 Operating lessons we measured that aren't in anyone's docs ([WIN.md](WIN.md)):
 - **Imperative goals succeed; meta-instructions fail.** "Complete this
@@ -93,6 +109,67 @@ seconds by Novita. That is the retiring tech's translation, done by a model.
 - The concurrency cap doesn't hurt this vertical: a realistic nightly queue
   of work orders drains **sequentially** — 15–20 min × 20 work orders fits
   inside a single night shift with the cap exactly as it is today.
+
+#### The features — one queue, four night-clerk moves
+
+| mode | what the night clerk does | stops at | status |
+|---|---|---|---|
+| `plant.py "…"` | exact part on McMaster-Carr: part №, price, stock | read-only | live ticket in flight |
+| `--cart` | filled cart + what checkout requires to order | before "Place Order" | built; fires when the slot frees |
+| `--warranty` | manufacturer RMA claim, completed from the work order | before final submit | built, output below |
+| `--rebate` | utility rebate owed for the efficiency swap: program, amount, deadline | read-only | built, output below |
+
+Every mode stops short of the irreversible click by design — the human
+approves; the night clerk did everything up to the signature. The recovery
+modes are money already owed, unclaimed because a portal form is in the way
+([PLANT.md](PLANT.md), "The layer above procurement").
+
+Real output — `plant.py "pump 3 bearing failed, should still be in warranty" --warranty`:
+
+```
+  SPECIFIED WARRANTY GOAL
+  Go to Grundfos's support site, find the warranty/RMA claim form, and
+  complete it with: model CR 3 vertical multistage pump, serial
+  GF-2024-118842, purchased 2025-03-14, invoice INV-8841, failure:
+  motor-end bearing failure at ~14 months under normal duty; high-pitched
+  squeal then seizure. Return the claim reference or the list of fields
+  the final submission requires. Do not perform the final submission.
+  405 chars · target: https://www.grundfos.com
+```
+
+Real output — `plant.py "we swapped pump 3 motor for a premium-efficiency one" --rebate`:
+
+```
+  SPECIFIED REBATE GOAL
+  Search PG&E's California business rebate pages for programs covering
+  replacement of a 5 HP pump motor with a NEMA Premium efficiency motor
+  installed on 2026-07-10; return the applicable program name, rebate
+  amount, required documentation, and filing deadline. Read-only—do not
+  create accounts or submit applications.
+  316 chars · target: https://www.pge.com
+```
+
+#### One night shift, drawn to scale
+
+Concurrency is exactly 1 — measured, not assumed. The queue drains anyway:
+
+```mermaid
+gantt
+    title 22:00 → 00:00 — six items, zero humans awake
+    dateFormat HH:mm
+    axisFormat %H:%M
+    section parts
+    WO-114 source bearing (McMaster)      :a1, 22:00, 20m
+    WO-115 source drive belt (McMaster)   :a2, after a1, 20m
+    WO-117 fill cart, qty 2 shaft seals   :a3, after a2, 20m
+    section recovery
+    Grundfos warranty claim (WO-102)      :b1, after a3, 20m
+    PG&E motor rebate lookup (WO-102)     :b2, after b1, 20m
+    Boiler cert renewal, state portal     :b3, after b2, 20m
+```
+
+First shift arrives to part numbers, a filled cart, a completed claim form,
+and a rebate deadline — none of which existed at close of business.
 
 ### 2. De-identified batch SNAP screening for seniors ([SCOPE.md](SCOPE.md), [batch.py](batch.py))
 
@@ -158,7 +235,10 @@ holds. The ledger is [evidence/tickets.json](evidence/tickets.json).
 ## Run it
 
 ```bash
-python3 plant.py "bearing on pump 3 is squealing"      # maintenance vertical
+python3 plant.py "bearing on pump 3 is squealing"      # source the part (read-only)
+python3 plant.py "..." --cart                          # fill cart, stop before the order
+python3 plant.py "pump 3 bearing failed in warranty" --warranty   # complete the RMA form
+python3 plant.py "swapped pump 3 motor for premium-eff" --rebate  # find the rebate owed
 python3 plant.py "..." --dry                           # specificity layer only, ~4s, no ticket
 python3 snap.py  "my mom needs help with groceries"    # benefits vertical, interview mode
 python3 verify.py                                      # re-verify every claim, live
