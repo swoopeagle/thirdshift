@@ -116,7 +116,7 @@ down line is the most expensive hour in the plant.
 |---|---|---|
 | Specificity layer: vague work order + tech-answerable facts → one imperative goal, all four modes | — | ✅ works, [plant.py](plant.py) `--dry` |
 | McMaster-Carr read-only sourcing: sealed 6203-2RS equiv., 17×40×12mm → part number, price, stock | `tkt_os-NZoZVT6Q_-w8vPo7ovA` | ⏸ **blocked_on_user at minute 29 — asking for login credentials**, zero ambiguity questions. See below. |
-| PG&E rebate lookup (read-only, `--rebate` goal) | `tkt_8hDAny1kyyDvj6ewMii77w` | _in flight — recorded when terminal_ |
+| PG&E rebate lookup (read-only, `--rebate` goal) | `tkt_8hDAny1kyyDvj6ewMii77w` | ✅ **completed in 67 min** — programs named, $30–$100 quantified, docs listed, deadline calculated (2027-07-10) |
 
 **The McMaster result, read honestly:** the agent worked a famously bot-hostile
 catalog for 29 minutes without quitting and without a single clarifying

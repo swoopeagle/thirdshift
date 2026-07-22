@@ -72,9 +72,9 @@
   },
   {
    "ticket": "tkt_8hDAny1kyyDvj6ewMii77w",
-   "state": "pending",
-   "proves": "RECOVERY LAYER: --rebate goal live on pge.com, read-only",
-   "outcome": "in flight at ledger time",
+   "state": "completed",
+   "proves": "RECOVERY LAYER COMPLETED: --rebate goal on pge.com, 67 min, no blocks \u2014 programs named, $30-$100 quantified, documentation listed, filing deadline calculated (2027-07-10) from the install date",
+   "outcome": "PG&E Business Energy Efficiency Rebate Program + AESAP; $30 prescriptive / up to $100 (AESAP $20/HP); 4 required documents; deadline 2027-07-10",
    "instruction": "Search PG&E's California business rebate pages for programs covering replacement of a 5 HP pump motor with a NEMA Premium efficiency motor installed on 2026-07-10; return the applicable program name, rebate amount, required documentation, and filing deadline. Read-only - do not create accounts or submit applications."
   }
  ]

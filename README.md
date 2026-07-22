@@ -178,6 +178,16 @@ ambiguity blocks; what's left on a B2B catalog is auth, which is a bounded
 block the platform hands to a human and a real facility account resolves.
 Full read in [PLANT.md](PLANT.md).
 
+**The recovery layer, completed live** (`tkt_8hDAny1kyyDvj6ewMii77w`): the
+`--rebate` goal ran pge.com read-only for 67 minutes and came back with the
+whole filing package — the applicable programs by name (Business Energy
+Efficiency Rebate; AESAP for clean-water pumps), the dollar amounts ($30
+prescriptive flat rate; up to $20/HP ≈ $100 via AESAP), the four documents
+the application requires, and a **deadline it calculated itself**: install
+date 2026-07-10 → file by July 10, 2027. That is money the facility didn't
+know it was owed, identified overnight from one line of work-order text. No
+login, no block, no clarifying question — completed end-to-end.
+
 **Across suppliers**, the split is clean and worth stating precisely. The
 specificity layer is proven on all of them — McMaster, Grainger, and Zoro
 each compile a correct, distributor-specific goal in seconds, reproducible
