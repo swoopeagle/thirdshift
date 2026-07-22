@@ -172,3 +172,10 @@ Zero dependencies — Python stdlib only. Needs `.env` with `NOVITA_API_KEY`,
 > Agents don't need a better browser. They need the two questions an expert
 > would have asked first — so the slow, expensive executor only ever runs a
 > goal that can't block.
+
+And the two verticals are one product: a senior's benefits screening and a
+plant's warranty claim are the same thing — **value locked behind a form
+nobody has time to fill**. The layer where a slow, sequential,
+never-quits browser agent shines is recovery paperwork: warranty/RMA claims,
+utility rebates, compliance renewals, benefits ([PLANT.md](PLANT.md), "The
+layer above procurement"). thirdshift is the night clerk that files them.

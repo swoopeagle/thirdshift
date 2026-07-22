@@ -78,6 +78,32 @@ escalation channel — the agent asking the maintenance manager the one question
 ("shielded or sealed?") instead of quitting, exactly like the junior tech
 texting the retired one.
 
+## The layer above procurement: recovery
+
+The flow ActionLayer *completed end-to-end* tonight was a government form
+([WIN.md](WIN.md)). That points at the layer where it shines brightest —
+money already owed to the facility, unclaimed because a tedious portal form
+stands in front of it. All owned by the same maintenance manager, all fed by
+the same work-order queue:
+
+- **Warranty / RMA claims** — every failed part under warranty is a clunky
+  manufacturer portal with a login wall and no API. Nobody files for a $40
+  bearing; a year of work orders quietly donates real money to vendors.
+  thirdshift already holds the part, failure date, and symptom — the claim
+  writes itself.
+- **Utility rebates** — replace a motor with an efficient one and the utility
+  owes a rebate, claimable only through a deadline-bound portal form. Same
+  work order: source the part, file the rebate.
+- **Compliance renewals** — boiler certs, elevator permits, inspection
+  scheduling: recurring government-portal filings where the fine for
+  forgetting dwarfs the filing effort.
+
+Every property that kills consumer concierge selects for this: slow-tolerant,
+sequential-tolerant, form-heavy, login-walled. And it makes the two verticals
+one product: a senior's SNAP screening and a plant's warranty claim are the
+same thing — **value locked behind a form nobody has time to fill. thirdshift
+is the night clerk that files them.**
+
 ## The metric that sells it
 
 Time from **work-order-open → part-on-bench** (and its evil twin: the second
